@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+build/
+
+# Environment
+.env
+.env.local
+
+# Logs & OS
+*.log
+.DS_Store
+Thumbs.db
