@@ -20,7 +20,7 @@ export function ReportPanel({
         <button
           onClick={onGenerate}
           disabled={loading}
-          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-500 disabled:opacity-50"
+          className="rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 px-4 py-2 text-sm font-semibold text-white transition-transform hover:scale-105 disabled:opacity-50"
         >
           {loading ? "Generating…" : "Run Agents"}
         </button>
@@ -39,7 +39,7 @@ export function ReportPanel({
             <span
               className={`rounded-full px-3 py-1 text-xs font-semibold ${
                 report.source === "watsonx"
-                  ? "bg-blue-500/15 text-blue-300"
+                  ? "bg-blue-500/15 text-blue-300 border border-blue-500/20"
                   : "bg-amber-500/15 text-amber-300"
               }`}
             >
@@ -49,30 +49,44 @@ export function ReportPanel({
             </span>
           </div>
 
-          <h3 className="mb-2 text-sm font-semibold text-slate-200">
-            Eco-Auditor Findings
-          </h3>
-          <ul className="mb-4 space-y-1 text-sm">
-            {report.audit.map((a, i) => (
-              <li
-                key={i}
-                className={
-                  a.startsWith("PASS")
-                    ? "text-emerald-300"
-                    : "text-amber-300"
-                }
-              >
-                {a}
-              </li>
-            ))}
-          </ul>
+          {/* Eco-Auditor sub-card */}
+          <div className="glass rounded-xl p-4 mb-4">
+            <h3 className="mb-2 text-sm font-semibold text-slate-200">
+              Eco-Auditor Findings
+            </h3>
+            <ul className="space-y-1 text-sm">
+              {report.audit.map((a, i) => (
+                <li
+                  key={i}
+                  className={
+                    a.startsWith("PASS")
+                      ? "text-emerald-300"
+                      : "text-amber-300"
+                  }
+                >
+                  <span className="mr-1.5">
+                    {a.startsWith("PASS") ? "✓" : "⚠"}
+                  </span>
+                  {a}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <h3 className="mb-2 text-sm font-semibold text-slate-200">
-            Executive Reporting Agent
-          </h3>
-          <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-300">
-            {report.text}
-          </p>
+          {/* Executive Report sub-card */}
+          <div className="glass rounded-xl p-4">
+            <h3 className="mb-2 text-sm font-semibold text-slate-200">
+              Executive Reporting Agent
+            </h3>
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-300">
+              {report.text}
+            </p>
+            {report.source === "watsonx" && (
+              <p className="mt-3 text-xs text-blue-400/80 border-t border-blue-500/20 pt-2">
+                Powered by IBM Granite · {report.modelId}
+              </p>
+            )}
+          </div>
         </>
       )}
     </div>

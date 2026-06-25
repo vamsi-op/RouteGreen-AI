@@ -20,7 +20,12 @@ export function SegmentTable({ route }: { route: RouteResult }) {
         </thead>
         <tbody>
           {route.segments.map((s, i) => (
-            <tr key={i} className="border-t border-slate-800">
+            <tr
+              key={i}
+              className={`border-t border-slate-800 transition-colors hover:bg-slate-800/40 ${
+                i % 2 === 0 ? "bg-slate-800/20" : ""
+              }`}
+            >
               <td className="py-2 pr-4 font-medium text-slate-200">
                 {s.fromId} → {s.toId}
               </td>
@@ -30,8 +35,15 @@ export function SegmentTable({ route }: { route: RouteResult }) {
                   s.slopePct >= 0 ? "text-rose-300" : "text-emerald-300"
                 }`}
               >
-                {s.slopePct >= 0 ? "+" : ""}
-                {s.slopePct.toFixed(2)}
+                <span className="inline-flex items-center gap-1.5">
+                  <span
+                    className={`inline-block h-2 w-2 rounded-full ${
+                      s.slopePct >= 0 ? "bg-rose-400" : "bg-emerald-400"
+                    }`}
+                  />
+                  {s.slopePct >= 0 ? "+" : ""}
+                  {s.slopePct.toFixed(2)}
+                </span>
               </td>
               <td className="py-2 pr-4 tabular-nums">{s.cargoWeightKg.toFixed(0)}</td>
               <td className="py-2 pr-4 tabular-nums">{s.fuelLiters.toFixed(2)}</td>
@@ -40,7 +52,7 @@ export function SegmentTable({ route }: { route: RouteResult }) {
           ))}
         </tbody>
         <tfoot>
-          <tr className="border-t border-slate-700 font-semibold text-emerald-300">
+          <tr className="border-t border-slate-700 font-semibold text-emerald-300 bg-emerald-500/10 rounded-lg">
             <td className="py-2 pr-4">Total</td>
             <td className="py-2 pr-4 tabular-nums">
               {route.totalDistanceKm.toFixed(1)}

@@ -6,7 +6,7 @@ import {
   SAMPLE_STOPS,
 } from "./data";
 import { packCargo } from "./packing";
-import { solveRoute } from "./routing";
+import { solveRoute, DEFAULT_GA_OPTIONS } from "./routing";
 import type {
   CargoItem,
   ComparisonRow,
@@ -24,6 +24,7 @@ export interface OptimizeInput {
   coeffs?: FuelCoefficients;
   /** manual-loading volume utilisation assumed for the traditional baseline (0-100) */
   manualUtilizationPct?: number;
+  seed?: number;
 }
 
 function pct(traditional: number, improved: number): number {
@@ -38,9 +39,13 @@ export function runOptimization(input: OptimizeInput = {}): OptimizeResponse {
   const container = input.container ?? DEFAULT_CONTAINER;
   const coeffs = input.coeffs ?? DEFAULT_FUEL_COEFFS;
   const manualUtil = input.manualUtilizationPct ?? 45;
+  const seed = input.seed ?? 42;
 
   const packing = packCargo(cargo, container);
-  const { optimized, baseline } = solveRoute(stops, depotId, cargo, coeffs);
+  const { optimized, baseline } = solveRoute(stops, depotId, cargo, coeffs, {
+    ...DEFAULT_GA_OPTIONS,
+    seed,
+  });
 
   const comparison: ComparisonRow[] = [
     {
@@ -80,3 +85,4 @@ export function runOptimization(input: OptimizeInput = {}): OptimizeResponse {
 function round(n: number): number {
   return Math.round(n * 10) / 10;
 }
+

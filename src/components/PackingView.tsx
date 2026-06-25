@@ -153,6 +153,12 @@ export function PackingView({
     }
   }, [packing, container]);
 
+  const totalWeight = packing.placements.reduce(
+    (sum, p) => sum + p.item.weight,
+    0
+  );
+  const maxWeight = container.maxWeight;
+
   return (
     <div className="card">
       <div className="mb-3 flex items-center justify-between">
@@ -163,25 +169,32 @@ export function PackingView({
           {packing.volumeEfficiency.toFixed(1)}% filled
         </span>
       </div>
-      <canvas
-        ref={canvasRef}
-        width={520}
-        height={360}
-        className="w-full rounded-lg bg-slate-950"
-      />
-      <ul className="mt-4 grid grid-cols-2 gap-2 text-xs text-slate-300 sm:grid-cols-3">
+      {/* Gradient border glow around the canvas */}
+      <div className="rounded-xl p-[1px] bg-gradient-to-br from-emerald-500/30 via-transparent to-emerald-500/10">
+        <canvas
+          ref={canvasRef}
+          width={520}
+          height={360}
+          className="w-full rounded-xl bg-slate-950"
+        />
+      </div>
+      {/* Weight capacity label */}
+      <p className="mt-2 text-center text-xs text-slate-400">
+        Total: {totalWeight.toFixed(1)} kg / {maxWeight} kg capacity
+      </p>
+      <ul className="mt-4 grid grid-cols-2 gap-3 text-xs text-slate-300 sm:grid-cols-3">
         {packing.placements.map((p, i) => (
-          <li key={p.item.id} className="flex items-center gap-2">
+          <li key={p.item.id} className="flex items-center gap-2.5">
             <span
-              className="inline-block h-3 w-3 rounded-sm"
+              className="inline-block h-3.5 w-3.5 rounded-sm ring-1 ring-white/10"
               style={{ background: PALETTE[i % PALETTE.length] }}
             />
             {p.item.label} ({p.item.weight} kg)
           </li>
         ))}
         {packing.unplaced.map((u) => (
-          <li key={u.id} className="flex items-center gap-2 text-rose-400">
-            <span className="inline-block h-3 w-3 rounded-sm bg-rose-500" />
+          <li key={u.id} className="flex items-center gap-2.5 text-rose-400">
+            <span className="inline-block h-3.5 w-3.5 rounded-sm bg-rose-500 ring-1 ring-white/10" />
             {u.label} — unplaced
           </li>
         ))}

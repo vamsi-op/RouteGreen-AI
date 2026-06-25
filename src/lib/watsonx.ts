@@ -173,6 +173,7 @@ export async function generateReport(result: OptimizeResponse): Promise<AgentRep
       audit,
     };
   } catch (err) {
+    console.error("watsonx API error:", err);
     // Network/credential failure -> graceful fallback, never crash the request.
     return {
       source: "local-fallback",
