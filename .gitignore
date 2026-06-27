@@ -6,6 +6,9 @@ node_modules/
 out/
 build/
 
+# eco-lint report cache
+.eco-lint/
+
 # Environment
 .env
 .env.local

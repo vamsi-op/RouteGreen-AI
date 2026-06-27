@@ -1,0 +1,15 @@
+{
+  "extends": "eco-lint:recommended",
+  "rules": {
+    "ci/no-cache": "error",
+    "docker/large-base-image": "warn"
+  },
+  "ignore": [
+    "node_modules/**",
+    "dist/**",
+    "vendor/**",
+    ".next/**",
+    ".tooling/**"
+  ],
+  "reportDir": ".eco-lint"
+}

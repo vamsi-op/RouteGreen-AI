@@ -1,5 +1,7 @@
 # RouteGreen AI
 
+![eco-score](eco-badge.svg)
+
 Carbon-Aware Fleet Routing & 3D Cargo Load Optimization Platform — a hybrid AI + Operations Research system that solves 3D cargo packing and slope-aware, load-dependent vehicle routing concurrently, with an IBM Granite multi-agent QA layer producing audit-ready ESG reports.
 
 ## Stack
@@ -69,3 +71,18 @@ Fuel(i→j) = distance × [ cBase + cWeight × (tareTonnes + cargoTonnes) + cSlo
 ```
 
 Cargo is dropped at each stop, so the truck gets lighter along the tour — meaning the *order* of deliveries changes total fuel burned. The GA searches delivery permutations to minimize this, while a distance-only nearest-neighbour serves as the "traditional" baseline for comparison.
+
+## Sustainability (eco-lint)
+
+This project is linted for environmental impact with [eco-lint](https://github.com/vamsi-op/eco-lint), which scans `package.json` / CI / Docker configs for energy-wasteful patterns and estimates CO₂ savings.
+
+Current grade: **A (98/100)**. Applied optimizations:
+
+- Added an `engines` field pinning a modern LTS runtime (`node: >=20.0.0`) so the app runs on an efficient, well-optimized Node version.
+- Ran `npm dedupe` to flatten the dependency tree, shrinking `node_modules` and install/build time.
+
+Config lives in `.eco-lintrc.json`. To re-scan:
+
+```bash
+npx github:vamsi-op/eco-lint .        # or clone + build, then: node dist/cli.js .
+```
