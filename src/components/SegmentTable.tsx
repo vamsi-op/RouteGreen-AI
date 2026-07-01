@@ -8,14 +8,18 @@ export function SegmentTable({ route }: { route: RouteResult }) {
         Segment Audit Trail
       </h2>
       <table className="w-full text-sm">
+        <caption className="sr-only">
+          Segment-by-segment audit trail: distance, slope, remaining load, fuel,
+          and CO2 for each leg of the optimized route.
+        </caption>
         <thead>
           <tr className="text-left text-slate-400">
-            <th className="py-2 pr-4 font-medium">Segment</th>
-            <th className="py-2 pr-4 font-medium">Dist (km)</th>
-            <th className="py-2 pr-4 font-medium">Slope (%)</th>
-            <th className="py-2 pr-4 font-medium">Load (kg)</th>
-            <th className="py-2 pr-4 font-medium">Fuel (L)</th>
-            <th className="py-2 pr-4 font-medium">CO₂ (kg)</th>
+            <th scope="col" className="py-2 pr-4 font-medium">Segment</th>
+            <th scope="col" className="py-2 pr-4 font-medium">Dist (km)</th>
+            <th scope="col" className="py-2 pr-4 font-medium">Slope (%)</th>
+            <th scope="col" className="py-2 pr-4 font-medium">Load (kg)</th>
+            <th scope="col" className="py-2 pr-4 font-medium">Fuel (L)</th>
+            <th scope="col" className="py-2 pr-4 font-medium">CO₂ (kg)</th>
           </tr>
         </thead>
         <tbody>

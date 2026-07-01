@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#020617" />
+  <!-- Swap no-js → js as early as possible so the animate-in state only
+       applies when scripting is available. -->
+  <script>document.documentElement.classList.remove("no-js");document.documentElement.classList.add("js");</script>
+  <title>RouteGreen AI — Carbon-Aware Fleet Routing &amp; 3D Cargo Optimization</title>
+  <meta name="description" content="Hybrid AI + Operations Research platform for carbon-aware fleet routing and 3D cargo load optimization. Aligned with UN SDG 11, 12 and 13. Built with IBM Granite." />
+  <meta name="keywords" content="carbon-aware routing, 3D bin packing, IBM Granite, sustainability, ESG compliance, fleet optimization, SDG, watsonx.ai" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="RouteGreen AI — Carbon-Aware Fleet Routing &amp; 3D Cargo Optimization" />
+  <meta property="og:description" content="Hybrid AI + Operations Research platform for carbon-aware fleet routing and 3D cargo load optimization." />
+  <meta property="og:image" content="../eco-badge.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Three.js as ES module + addons -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- ── Navbar ─────────────────────────────────────── -->
+  <nav class="navbar" id="navbar" aria-label="Primary">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">RouteGreen<span class="accent"> AI</span></a>
+      <div class="nav-links" id="nav-links">
+        <a href="#problem" class="nav-link" data-section="problem">Problem</a>
+        <a href="#how-it-works" class="nav-link" data-section="how-it-works">How It Works</a>
+        <a href="#sdg" class="nav-link" data-section="sdg">SDGs</a>
+        <a href="#dashboard" class="nav-link" data-section="dashboard">Dashboard</a>
+        <a href="#simulator" class="nav-link" data-section="simulator">3D Simulator</a>
+        <a href="#impact" class="nav-link" data-section="impact">Impact</a>
+        <a href="#responsible-ai" class="nav-link" data-section="responsible-ai">Responsible AI</a>
+      </div>
+      <a href="https://github.com/vamsi-op/RouteGreen-AI.git" target="_blank" rel="noopener noreferrer" class="nav-github">GitHub ↗</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" hidden>
+      <a href="#problem" class="mobile-link">Problem</a>
+      <a href="#how-it-works" class="mobile-link">How It Works</a>
+      <a href="#sdg" class="mobile-link">SDGs</a>
+      <a href="#dashboard" class="mobile-link">Dashboard</a>
+      <a href="#simulator" class="mobile-link">3D Simulator</a>
+      <a href="#impact" class="mobile-link">Impact</a>
+      <a href="#responsible-ai" class="mobile-link">Responsible AI</a>
+      <a href="https://github.com/vamsi-op/RouteGreen-AI.git" target="_blank" rel="noopener noreferrer" class="mobile-link">GitHub ↗</a>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- ── Hero with full 3D scene ─────────────────── -->
+    <section class="hero" id="hero">
+      <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="sdg-badges" data-anim="fade-up">
+          <span class="sdg-badge sdg-11">SDG 11</span>
+          <span class="sdg-badge sdg-12">SDG 12</span>
+          <span class="sdg-badge sdg-13">SDG 13</span>
+        </div>
+        <h1 class="hero-title" data-anim="fade-up">
+          <span class="line">RouteGreen<span class="gradient-text"> AI</span></span>
+        </h1>
+        <p class="hero-tagline" data-anim="fade-up">
+          Carbon-Aware Fleet Routing &amp; 3D Cargo Load Optimization
+        </p>
+        <p class="hero-desc" data-anim="fade-up">
+          A hybrid AI + Operations Research platform that concurrently solves 3D cargo
+          packing and slope-aware, load-dependent vehicle routing — with an IBM Granite
+          multi-agent QA layer producing audit-ready ESG reports.
+        </p>
+        <div class="hero-cta" data-anim="fade-up">
+          <a href="#dashboard" class="btn btn-primary">Explore Dashboard ↓</a>
+          <a href="https://github.com/vamsi-op/RouteGreen-AI.git" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">View on GitHub</a>
+        </div>
+        <div class="hero-chips" data-anim="fade-up">
+          <span class="chip">Next-gen 3D</span>
+          <span class="chip">IBM Granite</span>
+          <span class="chip">Genetic Algorithm</span>
+          <span class="chip">3D-BPP</span>
+        </div>
+      </div>
+      <div class="scroll-hint" aria-hidden="true">
+        <span>Scroll</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+      </div>
+    </section>
+
+    <!-- ── Problem ──────────────────────────────────── -->
+    <section class="section" id="problem">
+      <div class="container">
+        <div class="section-head" data-anim="fade-up">
+          <span class="eyebrow">The Problem</span>
+          <h2 class="section-title">Why Traditional Logistics Falls Short</h2>
+          <p class="section-subtitle">Transport accounts for ~16% of global greenhouse gas emissions. Traditional fleet routing optimizes for distance alone, ignoring the physics of fuel consumption.</p>
+        </div>
+        <div class="grid grid-3">
+          <article class="card tilt" data-anim="fade-up">
+            <div class="card-icon">📦</div>
+            <h3>Inefficient Packing</h3>
+            <p>Manual cargo loading achieves only ~45% volume utilisation, wasting truck capacity and increasing the number of trips required.</p>
+          </article>
+          <article class="card tilt" data-anim="fade-up">
+            <div class="card-icon">🧭</div>
+            <h3>Distance-Only Routing</h3>
+            <p>GPS routing minimizes distance but ignores elevation and cargo weight — pulling heavy loads uphill burns 20–30% more fuel.</p>
+          </article>
+          <article class="card tilt" data-anim="fade-up">
+            <div class="card-icon">📊</div>
+            <h3>No Emission Auditing</h3>
+            <p>Most operations lack segment-level CO₂ tracking needed for Scope 3 reporting under GRI 302/305 and CSRD standards.</p>
+          </article>
+        </div>
+        <blockquote class="hmw" data-anim="fade-up">
+          “How might we use AI to optimize cargo load packing and delivery route sequencing so that transport-related fuel usage and Scope 3 carbon emissions can be minimized?”
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ── How It Works ─────────────────────────────── -->
+    <section class="section alt" id="how-it-works">
+      <div class="container">
+        <div class="section-head" data-anim="fade-up">
+          <span class="eyebrow">How It Works</span>
+          <h2 class="section-title">Three-Stage Optimization Pipeline</h2>
+          <p class="section-subtitle">From cargo loading to route sequencing to ESG compliance — each stage feeds into the next.</p>
+        </div>
+        <div class="grid grid-3 pipeline">
+          <article class="card step" data-anim="fade-up">
+            <div class="step-num">01</div>
+            <h3>3D Bin Packing</h3>
+            <p class="step-sub">Extreme-Point First-Fit-Decreasing</p>
+            <p>Items sorted by volume are packed using 6 axis-aligned orientations, minimizing wasted space while respecting weight limits and keeping the centre of mass low.</p>
+            <span class="pill">81.3% volume efficiency</span>
+          </article>
+          <article class="card step" data-anim="fade-up">
+            <div class="step-num">02</div>
+            <h3>Carbon-Aware Routing</h3>
+            <p class="step-sub">Genetic Algorithm VRP</p>
+            <p>A GA evolves delivery sequences using a slope-sensitive, load-dependent fuel model. Cargo drops at each stop, so delivery order changes total fuel burned.</p>
+            <span class="pill">7.4% fuel reduction</span>
+          </article>
+          <article class="card step" data-anim="fade-up">
+            <div class="step-num">03</div>
+            <h3>ESG Compliance Audit</h3>
+            <p class="step-sub">IBM Granite Multi-Agent QA</p>
+            <p>An Eco-Auditor validates load limits and emission ledgers; an Executive Reporting Agent drafts audit-ready ESG summaries aligned with GRI 302/305.</p>
+            <span class="pill">4 audit checks passed</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SDG ──────────────────────────────────────── -->
+    <section class="section" id="sdg">
+      <div class="container">
+        <div class="section-head" data-anim="fade-up">
+          <span class="eyebrow">SDG Alignment</span>
+          <h2 class="section-title">Aligned with Global Goals</h2>
+          <p class="section-subtitle">RouteGreen AI directly contributes to three United Nations Sustainable Development Goals.</p>
+        </div>
+        <div class="grid grid-3">
+          <article class="card sdg-card" data-anim="fade-up" style="--sdg:#F99D26">
+            <div class="sdg-accent"></div>
+            <p class="sdg-number">11</p>
+            <h3>Sustainable Cities &amp; Communities</h3>
+            <p>Optimizes freight delivery by reducing truck trips through better packing and smarter routing, cutting congestion and air pollution.</p>
+          </article>
+          <article class="card sdg-card" data-anim="fade-up" style="--sdg:#CF8D2A">
+            <div class="sdg-accent"></div>
+            <p class="sdg-number">12</p>
+            <h3>Responsible Consumption &amp; Production</h3>
+            <p>Raises container utilization from 45% to 81.3%, reducing resource waste per delivery via a shifting-weight fuel model.</p>
+          </article>
+          <article class="card sdg-card" data-anim="fade-up" style="--sdg:#48773E">
+            <div class="sdg-accent"></div>
+            <p class="sdg-number">13</p>
+            <h3>Climate Action</h3>
+            <p>Reduces Scope 3 transport CO₂ by 7.4% per dispatch through elevation-aware, load-dependent route optimization with a full audit trail.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Dashboard ────────────────────────────────── -->
+    <section class="section alt" id="dashboard">
+      <div class="container">
+        <div class="section-head" data-anim="fade-up">
+          <span class="eyebrow">Live Dashboard</span>
+          <h2 class="section-title">Optimization Results</h2>
+          <p class="section-subtitle">Real results computed in your browser by the 3D bin-packing and Genetic Algorithm routing engines on the North-East India dataset.</p>
+        </div>
+
+        <div class="rerun-row" data-anim="fade-up">
+          <button class="btn btn-outline" id="rerun-btn">⟳ Re-run Optimization</button>
+        </div>
+
+        <div id="dash-status" class="dash-status" role="status" aria-live="polite"></div>
+
+        <div id="dash-results" class="dash-results" hidden>
+          <div class="card" data-anim="fade-up">
+            <h3 class="card-title">Comparative Evaluation</h3>
+            <div class="table-scroll">
+              <table class="data-table" id="metrics-table">
+                <caption class="sr-only">Traditional vs RouteGreen AI across distance, volume, fuel and CO2.</caption>
+                <thead>
+                  <tr><th scope="col">Metric</th><th scope="col">Traditional</th><th scope="col">RouteGreen AI</th><th scope="col">Improvement</th></tr>
+                </thead>
+                <tbody id="metrics-body"></tbody>
+              </table>
+            </div>
+            <p class="note">RouteGreen optimises for <span class="accent">fuel &amp; CO₂</span>, not raw distance — it accepts a slightly longer route when smarter elevation/load sequencing lowers total fuel burn.</p>
+          </div>
+
+          <div class="card" data-anim="fade-up">
+            <h3 class="card-title">Segment Audit Trail</h3>
+            <div class="table-scroll">
+              <table class="data-table" id="segment-table">
+                <caption class="sr-only">Segment-by-segment distance, slope, load, fuel and CO2.</caption>
+                <thead>
+                  <tr><th scope="col">Segment</th><th scope="col">Dist (km)</th><th scope="col">Slope (%)</th><th scope="col">Load (kg)</th><th scope="col">Fuel (L)</th><th scope="col">CO₂ (kg)</th></tr>
+                </thead>
+                <tbody id="segment-body"></tbody>
+                <tfoot id="segment-foot"></tfoot>
+              </table>
+            </div>
+          </div>
+
+          <div class="card" data-anim="fade-up">
+            <div class="report-head">
+              <h3 class="card-title">IBM Granite QA &amp; ESG Report</h3>
+              <button class="btn btn-primary sm" id="agents-btn">Run Agents</button>
+            </div>
+            <div id="report-body">
+              <p class="note">Run the multi-agent network to audit the optimization and draft the ESG compliance statement.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 3D Simulator ─────────────────────────────── -->
+    <section class="section" id="simulator">
+      <div class="container">
+        <div class="section-head" data-anim="fade-up">
+          <span class="eyebrow">Interactive Simulation</span>
+          <h2 class="section-title">3D Pipeline Simulator</h2>
+          <p class="section-subtitle">Watch cargo pack into the truck, then follow the truck as it climbs and delivers across the hilly terrain — its weight dropping at every stop.</p>
+        </div>
+        <div class="sim-shell" data-anim="fade-up">
+          <div class="sim-controls">
+            <div class="seg-control" role="tablist" aria-label="Simulator mode">
+              <button class="seg active" id="mode-packing" role="tab" aria-selected="true">📦 Packing</button>
+              <button class="seg" id="mode-routing" role="tab" aria-selected="false">🚚 Routing</button>
+            </div>
+            <div class="sim-buttons">
+              <button class="icon-btn" id="sim-play" aria-label="Play or pause">⏸ Pause</button>
+              <button class="icon-btn" id="sim-restart" aria-label="Restart">↻ Restart</button>
+              <button class="icon-btn" id="sim-speed" aria-label="Change speed">1×</button>
+            </div>
+          </div>
+          <div class="sim-stage">
+            <canvas id="sim-canvas"></canvas>
+            <div class="telemetry" id="telemetry">
+              <div class="tele-row"><span>Status</span><b id="tele-status">Initializing…</b></div>
+              <div class="tele-row"><span>Payload</span><b id="tele-weight">0 kg</b></div>
+              <div class="tele-row"><span>Segment</span><b id="tele-segment">—</b></div>
+              <div class="tele-row"><span>Slope</span><b id="tele-slope">0%</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Impact ───────────────────────────────────── -->
+    <section class="section alt" id="impact">
+      <div class="container">
+        <div class="section-head" data-anim="fade-up">
+          <span class="eyebrow">Measured Impact</span>
+          <h2 class="section-title">Results That Matter</h2>
+          <p class="section-subtitle">Verified optimization results from the North-East India hill corridor sample dataset.</p>
+        </div>
+        <div class="grid grid-4">
+          <div class="card stat" data-anim="fade-up">
+            <p class="stat-value"><span class="counter" data-target="81.3" data-decimals="1">0</span>%</p>
+            <p class="stat-label">Volume Utilization</p>
+            <p class="stat-sub">vs 45% traditional</p>
+            <div class="bar"><i style="--w:81.3%"></i></div>
+          </div>
+          <div class="card stat" data-anim="fade-up">
+            <p class="stat-value"><span class="counter" data-target="7.4" data-decimals="1">0</span>%</p>
+            <p class="stat-label">Fuel Savings</p>
+            <p class="stat-sub">2.6 L diesel saved</p>
+            <div class="bar"><i style="--w:74%"></i></div>
+          </div>
+          <div class="card stat" data-anim="fade-up">
+            <p class="stat-value"><span class="counter" data-target="7.4" data-decimals="1">0</span>%</p>
+            <p class="stat-label">CO₂ Reduction</p>
+            <p class="stat-sub">6.9 kg CO₂e avoided</p>
+            <div class="bar"><i style="--w:74%"></i></div>
+          </div>
+          <div class="card stat" data-anim="fade-up">
+            <p class="stat-value"><span class="counter" data-target="4" data-decimals="0">0</span>/4</p>
+            <p class="stat-label">ESG Audit Checks</p>
+            <p class="stat-sub">GRI 302/305 aligned</p>
+            <div class="bar"><i style="--w:100%"></i></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Responsible AI ───────────────────────────── -->
+    <section class="section" id="responsible-ai">
+      <div class="container">
+        <div class="section-head" data-anim="fade-up">
+          <span class="eyebrow">Responsible AI</span>
+          <h2 class="section-title">Built with Ethics in Mind</h2>
+          <p class="section-subtitle">Every project must address fairness, transparency, ethics and privacy. Here is how RouteGreen AI meets these principles.</p>
+        </div>
+        <div class="grid grid-2">
+          <article class="card" data-anim="fade-up"><div class="card-icon">⚖️</div><h3>Fairness</h3><p>Route scoring relies exclusively on physical variables — distance, road grade and cargo weight. No demographic or biased variables are used.</p></article>
+          <article class="card" data-anim="fade-up"><div class="card-icon">🔍</div><h3>Transparency</h3><p>The pipeline is fully deterministic and auditable. Every route decision is traceable through the segment-by-segment audit trail.</p></article>
+          <article class="card" data-anim="fade-up"><div class="card-icon">🛡️</div><h3>Ethics</h3><p>The system exists solely for environmental benefit — reducing fuel waste and carbon emissions — with no harmful or misleading outputs.</p></article>
+          <article class="card" data-anim="fade-up"><div class="card-icon">🔒</div><h3>Privacy</h3><p>All coordinates and packages in the prototype are simulated and anonymous. No personal data is collected, stored or processed.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <h2 class="nav-logo">RouteGreen<span class="accent"> AI</span></h2>
+      <p>Built for the <b>1M1B × IBM SkillsBuild × AICTE</b> AI for Sustainability Virtual Internship.</p>
+      <div class="tech-badges">
+        <span>Three.js</span><span>WebGL</span><span>IBM Granite</span><span>Genetic Algorithm VRP</span><span>3D-BPP</span><span>Vanilla JS</span>
+      </div>
+      <div class="sdg-badges">
+        <span class="sdg-badge sdg-11">SDG 11</span>
+        <span class="sdg-badge sdg-12">SDG 12</span>
+        <span class="sdg-badge sdg-13">SDG 13</span>
+      </div>
+      <p class="copyright">© <span id="year"></span> RouteGreen AI. Carbon-Aware Fleet Routing &amp; 3D Cargo Optimization.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+  <!-- Failsafe: if the module pipeline fails to run (e.g. modules blocked or a
+       CDN error), reveal all content after a short delay so the page is never
+       left blank. Classic script — runs even if ES modules are unavailable. -->
+  <script>
+    setTimeout(function () {
+      document.querySelectorAll("[data-anim]:not(.is-visible)").forEach(function (el) {
+        el.classList.add("is-visible");
+      });
+    }, 2500);
+  </script>
+</body>
+</html>

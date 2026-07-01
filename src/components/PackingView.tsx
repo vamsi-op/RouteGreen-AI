@@ -37,8 +37,13 @@ export function PackingView({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const W = canvas.width;
-    const H = canvas.height;
+    // Logical drawing size; backing store scaled for crisp high-DPI output.
+    const W = 520;
+    const H = 360;
+    const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
 
     const maxDim = Math.max(container.W, container.H, container.D);
@@ -175,6 +180,10 @@ export function PackingView({
           ref={canvasRef}
           width={520}
           height={360}
+          role="img"
+          aria-label={`Isometric 3D view of the truck cargo bay packed to ${packing.volumeEfficiency.toFixed(
+            1,
+          )} percent volume efficiency with ${packing.placements.length} items.`}
           className="w-full rounded-xl bg-slate-950"
         />
       </div>

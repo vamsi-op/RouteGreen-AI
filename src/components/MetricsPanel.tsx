@@ -8,12 +8,16 @@ export function MetricsPanel({ rows }: { rows: ComparisonRow[] }) {
       </h2>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
+          <caption className="sr-only">
+            Traditional logistics versus RouteGreen AI across distance, volume
+            utilization, fuel, and CO2, with the relative improvement for each.
+          </caption>
           <thead>
             <tr className="text-left text-slate-400">
-              <th className="py-2 pr-4 font-medium">Metric</th>
-              <th className="py-2 pr-4 font-medium">Traditional</th>
-              <th className="py-2 pr-4 font-medium">RouteGreen AI</th>
-              <th className="py-2 pr-4 font-medium">Improvement</th>
+              <th scope="col" className="py-2 pr-4 font-medium">Metric</th>
+              <th scope="col" className="py-2 pr-4 font-medium">Traditional</th>
+              <th scope="col" className="py-2 pr-4 font-medium">RouteGreen AI</th>
+              <th scope="col" className="py-2 pr-4 font-medium">Improvement</th>
             </tr>
           </thead>
           <tbody>
@@ -26,7 +30,10 @@ export function MetricsPanel({ rows }: { rows: ComparisonRow[] }) {
                   key={r.metric}
                   className="border-l-2 border-transparent border-t border-t-slate-800 transition-colors hover:border-l-emerald-500/50 hover:bg-slate-800/40"
                 >
-                  <td className="py-3 pr-4 font-medium text-slate-200">
+                  <th
+                    scope="row"
+                    className="py-3 pr-4 text-left font-medium text-slate-200"
+                  >
                     {r.metric}
                     <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-800/60">
                       <div
@@ -38,7 +45,7 @@ export function MetricsPanel({ rows }: { rows: ComparisonRow[] }) {
                         style={{ width: `${barWidth}%` }}
                       />
                     </div>
-                  </td>
+                  </th>
                   <td className="py-3 pr-4 tabular-nums text-slate-300">
                     {r.traditional}
                     {r.unit}

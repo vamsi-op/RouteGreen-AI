@@ -51,8 +51,14 @@ export function RouteMap({
       <div className="rounded-xl p-[1px] bg-gradient-to-br from-emerald-500/30 via-transparent to-emerald-500/10">
         <svg
           viewBox={`0 0 ${width} ${height}`}
+          role="img"
+          aria-labelledby="routemap-title routemap-desc"
           className="w-full rounded-xl bg-slate-950"
         >
+          <title id="routemap-title">Carbon-aware delivery route</title>
+          <desc id="routemap-desc">
+            {`Map of ${orderedStops.length} stops connected in the fuel-optimized delivery sequence, starting and ending at the depot.`}
+          </desc>
           {/* SVG defs: glow filter and territory gradient */}
           <defs>
             <filter id="glow">

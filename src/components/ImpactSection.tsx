@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 interface Metric {
   value: number;
@@ -51,10 +52,18 @@ function AnimatedMetricCard({ metric }: { metric: Metric }) {
   const [hasAnimated, setHasAnimated] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>(0);
+  const reducedMotion = useReducedMotion();
 
   const startAnimation = useCallback(() => {
     if (hasAnimated) return;
     setHasAnimated(true);
+
+    // Honor prefers-reduced-motion: jump straight to the final values.
+    if (reducedMotion) {
+      setDisplayValue(metric.value);
+      setBarWidth(metric.barPercent);
+      return;
+    }
 
     const duration = 1500;
     const startTime = performance.now();
@@ -77,7 +86,7 @@ function AnimatedMetricCard({ metric }: { metric: Metric }) {
     };
 
     animationRef.current = requestAnimationFrame(animate);
-  }, [hasAnimated, metric.value, metric.barPercent]);
+  }, [hasAnimated, metric.value, metric.barPercent, reducedMotion]);
 
   useEffect(() => {
     const node = cardRef.current;

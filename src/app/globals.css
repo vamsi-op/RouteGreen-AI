@@ -230,3 +230,33 @@ body {
               radial-gradient(ellipse 60% 40% at 80% 50%, rgba(52, 211, 153, 0.08), transparent),
               radial-gradient(ellipse 50% 60% at 20% 80%, rgba(6, 78, 59, 0.12), transparent);
 }
+
+/* ── Skip link (keyboard accessibility) ───────────────── */
+.skip-link {
+  @apply sr-only;
+}
+.skip-link:focus {
+  @apply not-sr-only fixed left-4 top-4 z-[100] rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-lg;
+}
+
+/* ── Reduced motion ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Ensure scroll-reveal content is never left hidden when animation is off. */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
