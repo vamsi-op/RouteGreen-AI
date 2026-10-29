@@ -101,7 +101,7 @@ export function Dashboard() {
               <p>{error ?? "Optimization failed."}</p>
               <button
                 type="button"
-                onClick={run}
+                onClick={() => run()}
                 className="rounded-lg border border-rose-600/60 px-4 py-1.5 font-semibold text-rose-100 transition hover:bg-rose-800/30"
               >
                 Retry

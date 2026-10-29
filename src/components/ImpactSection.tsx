@@ -13,10 +13,10 @@ interface Metric {
 }
 
 interface ImpactSectionProps {
-  data?: OptimizeResponse;
+  data?: OptimizeResponse | null;
 }
 
-function getMetricsFromData(data?: OptimizeResponse): Metric[] {
+function getMetricsFromData(data?: OptimizeResponse | null): Metric[] {
   // Default/fallback metrics
   const defaults: Metric[] = [
     {
