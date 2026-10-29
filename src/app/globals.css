@@ -179,11 +179,11 @@ body {
 }
 
 .section-title {
-  @apply text-3xl font-bold tracking-tight text-white sm:text-4xl;
+  @apply text-3xl font-bold tracking-tight text-white sm:text-4xl text-center mx-auto;
 }
 
 .section-subtitle {
-  @apply mt-3 max-w-2xl text-base text-slate-400 sm:text-lg;
+  @apply mt-3 max-w-2xl text-base text-slate-400 sm:text-lg text-center mx-auto;
 }
 
 /* ── SDG badge colors (official UN palette) ───────────── */

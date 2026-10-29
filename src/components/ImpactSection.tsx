@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import type { OptimizeResponse } from '@/lib/types';
 
 interface Metric {
   value: number;
@@ -11,36 +12,87 @@ interface Metric {
   barPercent: number;
 }
 
-const metrics: Metric[] = [
-  {
-    value: 81.3,
-    suffix: '%',
-    label: 'Volume Utilization',
-    subtitle: 'vs 45% traditional',
-    barPercent: 81.3,
-  },
-  {
-    value: 7.4,
-    suffix: '%',
-    label: 'Fuel Savings',
-    subtitle: '2.6L diesel saved',
-    barPercent: 7.4,
-  },
-  {
-    value: 7.4,
-    suffix: '%',
-    label: 'CO₂ Reduction',
-    subtitle: '6.9 kg CO₂e avoided',
-    barPercent: 7.4,
-  },
-  {
-    value: 4,
-    suffix: '/4',
-    label: 'ESG Audit Checks',
-    subtitle: 'GRI 302/305 aligned',
-    barPercent: 100,
-  },
-];
+interface ImpactSectionProps {
+  data?: OptimizeResponse;
+}
+
+function getMetricsFromData(data?: OptimizeResponse): Metric[] {
+  // Default/fallback metrics
+  const defaults: Metric[] = [
+    {
+      value: 81.3,
+      suffix: '%',
+      label: 'Volume Utilization',
+      subtitle: 'vs 45% traditional',
+      barPercent: 81.3,
+    },
+    {
+      value: 3.8,
+      suffix: '%',
+      label: 'Fuel Savings',
+      subtitle: '1.4L diesel saved',
+      barPercent: 3.8,
+    },
+    {
+      value: 3.6,
+      suffix: ' kg',
+      label: 'CO₂ Reduction',
+      subtitle: '3.8% reduction',
+      barPercent: 3.8,
+    },
+    {
+      value: 4,
+      suffix: '/4',
+      label: 'ESG Audit Checks',
+      subtitle: 'GRI 302/305 aligned',
+      barPercent: 100,
+    },
+  ];
+
+  if (!data) return defaults;
+
+  // Extract values from comparison data
+  const volumeRow = data.comparison.find(r => r.metric === 'Volume Utilization');
+  const fuelRow = data.comparison.find(r => r.metric === 'Fuel Consumed');
+  const co2Row = data.comparison.find(r => r.metric === 'CO2 Emissions');
+
+  const volumeUtil = volumeRow?.routeGreen ?? 81.3;
+  const fuelSavingsPct = fuelRow?.improvementPct ?? 3.8;
+  const fuelSavedL = fuelRow ? (fuelRow.traditional - fuelRow.routeGreen) : 1.4;
+  const co2SavedKg = co2Row ? (co2Row.traditional - co2Row.routeGreen) : 3.6;
+  const co2SavingsPct = co2Row?.improvementPct ?? 3.8;
+
+  return [
+    {
+      value: volumeUtil,
+      suffix: '%',
+      label: 'Volume Utilization',
+      subtitle: 'vs 45% traditional',
+      barPercent: volumeUtil,
+    },
+    {
+      value: fuelSavingsPct,
+      suffix: '%',
+      label: 'Fuel Savings',
+      subtitle: `${fuelSavedL.toFixed(1)}L diesel saved`,
+      barPercent: Math.min(fuelSavingsPct, 100),
+    },
+    {
+      value: co2SavedKg,
+      suffix: ' kg',
+      label: 'CO₂ Reduction',
+      subtitle: `${co2SavingsPct.toFixed(1)}% reduction`,
+      barPercent: Math.min(co2SavingsPct, 100),
+    },
+    {
+      value: 4,
+      suffix: '/4',
+      label: 'ESG Audit Checks',
+      subtitle: 'GRI 302/305 aligned',
+      barPercent: 100,
+    },
+  ];
+}
 
 function easeOutCubic(t: number): number {
   return 1 - Math.pow(1 - t, 3);
@@ -51,68 +103,66 @@ function AnimatedMetricCard({ metric }: { metric: Metric }) {
   const [barWidth, setBarWidth] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number>(0);
   const reducedMotion = useReducedMotion();
 
-  const startAnimation = useCallback(() => {
-    if (hasAnimated) return;
-    setHasAnimated(true);
-
-    // Honor prefers-reduced-motion: jump straight to the final values.
-    if (reducedMotion) {
-      setDisplayValue(metric.value);
-      setBarWidth(metric.barPercent);
-      return;
-    }
-
-    const duration = 1500;
-    const startTime = performance.now();
-
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const easedProgress = easeOutCubic(progress);
-
-      const currentValue = easedProgress * metric.value;
-      setDisplayValue(currentValue);
-      setBarWidth(easedProgress * metric.barPercent);
-
-      if (progress < 1) {
-        animationRef.current = requestAnimationFrame(animate);
-      } else {
-        setDisplayValue(metric.value);
-        setBarWidth(metric.barPercent);
-      }
-    };
-
-    animationRef.current = requestAnimationFrame(animate);
-  }, [hasAnimated, metric.value, metric.barPercent, reducedMotion]);
+  // Reset animation when metric value changes
+  useEffect(() => {
+    setHasAnimated(false);
+    setDisplayValue(0);
+    setBarWidth(0);
+  }, [metric.value, metric.barPercent]);
 
   useEffect(() => {
     const node = cardRef.current;
-    if (!node) return;
+    if (!node || hasAnimated) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            startAnimation();
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true);
+            
+            // Honor prefers-reduced-motion: jump straight to the final values.
+            if (reducedMotion) {
+              setDisplayValue(metric.value);
+              setBarWidth(metric.barPercent);
+              return;
+            }
+
+            const duration = 1500;
+            const startTime = performance.now();
+
+            const animate = (currentTime: number) => {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const easedProgress = easeOutCubic(progress);
+
+              const currentValue = easedProgress * metric.value;
+              setDisplayValue(currentValue);
+              setBarWidth(easedProgress * metric.barPercent);
+
+              if (progress < 1) {
+                requestAnimationFrame(animate);
+              } else {
+                setDisplayValue(metric.value);
+                setBarWidth(metric.barPercent);
+              }
+            };
+
+            requestAnimationFrame(animate);
             observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     );
 
     observer.observe(node);
 
     return () => {
       observer.disconnect();
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
     };
-  }, [startAnimation]);
+  }, [hasAnimated, metric.value, metric.barPercent, reducedMotion]);
 
   const formatValue = (val: number): string => {
     if (metric.suffix === '/4') {
@@ -151,7 +201,9 @@ function AnimatedMetricCard({ metric }: { metric: Metric }) {
   );
 }
 
-export default function ImpactSection() {
+export default function ImpactSection({ data }: ImpactSectionProps) {
+  const metrics = getMetricsFromData(data);
+  
   return (
     <section className="section">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">

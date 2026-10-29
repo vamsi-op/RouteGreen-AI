@@ -2,16 +2,25 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchOptimization, isAbortError } from "@/lib/api-client";
-import type { OptimizeResponse } from "@/lib/types";
+import type { OptimizeResponse, CargoItem } from "@/lib/types";
 
 export type Status = "idle" | "loading" | "success" | "error";
+
+export interface OptimizationParams {
+  cargo?: CargoItem[];
+  gaParams?: {
+    populationSize: number;
+    generations: number;
+    mutationRate: number;
+  };
+}
 
 interface UseOptimizationResult {
   data: OptimizeResponse | null;
   status: Status;
   error: string | null;
-  /** Re-run the optimization. Cancels any in-flight request first. */
-  run: () => void;
+  /** Re-run the optimization with optional parameters. Cancels any in-flight request first. */
+  run: (params?: OptimizationParams) => void;
 }
 
 /**
@@ -24,7 +33,7 @@ export function useOptimization(): UseOptimizationResult {
   const [error, setError] = useState<string | null>(null);
   const controllerRef = useRef<AbortController | null>(null);
 
-  const run = useCallback(() => {
+  const run = useCallback((params?: OptimizationParams) => {
     controllerRef.current?.abort();
     const controller = new AbortController();
     controllerRef.current = controller;
@@ -32,7 +41,7 @@ export function useOptimization(): UseOptimizationResult {
     setStatus("loading");
     setError(null);
 
-    fetchOptimization({ signal: controller.signal })
+    fetchOptimization({ signal: controller.signal, ...params })
       .then((result) => {
         if (controller.signal.aborted) return;
         setData(result);

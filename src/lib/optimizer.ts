@@ -25,6 +25,12 @@ export interface OptimizeInput {
   /** manual-loading volume utilisation assumed for the traditional baseline (0-100) */
   manualUtilizationPct?: number;
   seed?: number;
+  /** Genetic Algorithm parameters */
+  gaParams?: {
+    populationSize?: number;
+    generations?: number;
+    mutationRate?: number;
+  };
 }
 
 function pct(traditional: number, improved: number): number {
@@ -42,10 +48,17 @@ export function runOptimization(input: OptimizeInput = {}): OptimizeResponse {
   const seed = input.seed ?? 42;
 
   const packing = packCargo(cargo, container);
-  const { optimized, baseline } = solveRoute(stops, depotId, cargo, coeffs, {
+  
+  // Merge custom GA parameters with defaults
+  const gaOptions = {
     ...DEFAULT_GA_OPTIONS,
     seed,
-  });
+    ...(input.gaParams?.populationSize && { populationSize: input.gaParams.populationSize }),
+    ...(input.gaParams?.generations && { generations: input.gaParams.generations }),
+    ...(input.gaParams?.mutationRate && { mutationRate: input.gaParams.mutationRate }),
+  };
+  
+  const { optimized, baseline } = solveRoute(stops, depotId, cargo, coeffs, gaOptions);
 
   const comparison: ComparisonRow[] = [
     {

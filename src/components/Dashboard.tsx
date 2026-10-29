@@ -21,6 +21,7 @@ import { RouteMap } from "./RouteMap";
 import { SegmentTable } from "./SegmentTable";
 import { ReportPanel } from "./ReportPanel";
 import { ResponsibleAI } from "./ResponsibleAI";
+import { OptimizationControls } from "./OptimizationControls";
 
 /**
  * Three.js is heavy (~0.5MB) and browser-only. Load it lazily so it never
@@ -88,22 +89,8 @@ export function Dashboard() {
             />
           </div>
 
-          <div className="reveal mb-8 flex justify-center">
-            <button
-              type="button"
-              onClick={run}
-              disabled={isLoading}
-              className="group rounded-xl border border-emerald-600/60 bg-emerald-600/10 px-6 py-2.5 text-sm font-semibold text-emerald-300 transition hover:bg-emerald-600/20 hover:shadow-lg hover:shadow-emerald-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {isLoading ? (
-                <span className="flex items-center gap-2">
-                  <Spinner className="h-4 w-4" />
-                  Optimising…
-                </span>
-              ) : (
-                "⟳ Re-run Optimization"
-              )}
-            </button>
+          <div className="reveal mb-8">
+            <OptimizationControls onRun={run} isLoading={isLoading} />
           </div>
 
           {status === "error" && (
@@ -190,7 +177,7 @@ export function Dashboard() {
       )}
 
       <section id="impact" aria-label="Measured impact">
-        <ImpactSection />
+        <ImpactSection data={data} />
       </section>
 
       <section id="responsible-ai" aria-label="Responsible AI">

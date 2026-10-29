@@ -7,7 +7,7 @@
  *  - normalized error handling through the `ApiError` type
  */
 
-import type { OptimizeResponse } from "./types";
+import type { OptimizeResponse, CargoItem } from "./types";
 import type { AgentReport } from "./watsonx";
 
 const DEFAULT_TIMEOUT_MS = 20_000;
@@ -25,6 +25,15 @@ export class ApiError extends Error {
 interface RequestOptions {
   signal?: AbortSignal;
   timeoutMs?: number;
+}
+
+interface OptimizationRequestOptions extends RequestOptions {
+  cargo?: CargoItem[];
+  gaParams?: {
+    populationSize: number;
+    generations: number;
+    mutationRate: number;
+  };
 }
 
 /** Merge a caller signal with an internal timeout signal. */
@@ -55,15 +64,21 @@ function withTimeout(
 
 async function request<T>(
   path: string,
+  method: 'GET' | 'POST' = 'GET',
+  body?: unknown,
   { signal, timeoutMs = DEFAULT_TIMEOUT_MS }: RequestOptions = {},
 ): Promise<T> {
   const { signal: mergedSignal, cleanup } = withTimeout(signal, timeoutMs);
 
   try {
     const res = await fetch(path, {
-      method: "GET",
-      headers: { Accept: "application/json" },
+      method,
+      headers: { 
+        Accept: "application/json",
+        ...(body ? { 'Content-Type': 'application/json' } : {}),
+      },
       signal: mergedSignal,
+      ...(body ? { body: JSON.stringify(body) } : {}),
     });
 
     if (!res.ok) {
@@ -94,15 +109,21 @@ async function request<T>(
 }
 
 export function fetchOptimization(
-  options?: RequestOptions,
+  options?: OptimizationRequestOptions,
 ): Promise<OptimizeResponse> {
-  return request<OptimizeResponse>("/api/optimize", options);
+  const { cargo, gaParams, ...requestOptions } = options || {};
+  
+  if (cargo || gaParams) {
+    return request<OptimizeResponse>("/api/optimize", 'POST', { cargo, gaParams }, requestOptions);
+  }
+  
+  return request<OptimizeResponse>("/api/optimize", 'GET', undefined, requestOptions);
 }
 
 export function fetchReport(
   options?: RequestOptions,
 ): Promise<{ report: AgentReport }> {
-  return request<{ report: AgentReport }>("/api/report", options);
+  return request<{ report: AgentReport }>("/api/report", 'GET', undefined, options);
 }
 
 /** True when an error represents a caller/unmount cancellation we can ignore. */
